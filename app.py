@@ -11,8 +11,112 @@ import numpy as np
 import plotly.express as px
 import plotly
 
-df = pd.read_csv('datadata.csv')
+df = pd.read_csv('data/data2.csv')
+fig3 = px.scatter_geo(df, locations="country_code", color="country",
+                     hover_name="country", size="Depression",
+                     projection="natural earth")
+#layout3 = [dict]
 
+title2 = 'Fertility Rate'
+labels2 = ['ARMENIA', 'BANGLADESH', 'BRAZIL', 'PORTUGAL']
+colors2 = ['rgb(0,0,255)', 'rgb(255,165,0)', 'rgb(0,128,0)', 'rgb(106,13,173)']
+
+mode_size = [6, 6, 6, 6]
+line_size = [2, 2, 2, 2]
+
+x_data = np.vstack((np.arange(2005, 2016),)*4)
+
+y_data = np.array([
+    [1.40,1.30,1.40,1.40,1.60,1.55,1.50,1.73,1.71,1.69,1.66,1.63],
+    [2.61,2.52,2.44,2.38,2.32,2.28,2.24,2.21,2.18,2.16,2.13,2.10],
+    [1.98,1.93,1.88,1.85,1.82,1.81,1.79,1.78,1.77,1.75,1.74,1.73],
+    [1.42,1.40,1.38,1.36,1.34,1.33,1.31,1.29,1.28,1.26,1.25,1.25],
+])
+
+fig2 = go.Figure()
+
+for i in range(0, 4):
+    fig2.add_trace(go.Scatter(x=x_data[i], y=y_data[i], mode='lines',
+        name=labels2[i],
+        line=dict(color=colors2[i], width=line_size[i]),
+        connectgaps=True,
+    ))
+
+    # endpoints
+    fig2.add_trace(go.Scatter(
+        x=[x_data[i][0], x_data[i][-1]],
+        y=[y_data[i][0], y_data[i][-1]],
+        mode='markers',
+        marker=dict(color=colors2[i], size=mode_size[i])
+    ))
+
+fig2.update_layout(
+    xaxis=dict(
+        showline=True,
+        showgrid=False,
+        showticklabels=True,
+        linecolor='rgb(204, 204, 204)',
+        linewidth=2,
+        ticks='outside',
+        tickfont=dict(
+            family='Arial',
+            size=8,
+            color='rgb(82, 82, 82)',
+        ),
+    ),
+    yaxis=dict(
+        showgrid=False,
+        zeroline=False,
+        showline=False,
+        showticklabels=False,
+    ),
+    autosize=False,
+    margin=dict(
+        autoexpand=False,
+        l=100,
+        r=20,
+        t=110,
+    ),
+    showlegend=False,
+    plot_bgcolor='white'
+)
+
+annotations = []
+
+# Adding labels
+for y_trace, label, color in zip(y_data, labels2, colors2):
+    # labeling the left_side of the plot
+    annotations.append(dict(xref='paper', x=0.05, y=y_trace[1],
+                                  xanchor='right', yanchor='middle',
+                                  text=label + ' {}%'.format(y_trace[1]),
+                                  font=dict(family='Arial',
+                                            size=10),
+                                  showarrow=False))
+    # labeling the right_side of the plot
+    annotations.append(dict(xref='paper', x=0.95, y=y_trace[11],
+                                  xanchor='left', yanchor='middle',
+                                  text='{}%'.format(y_trace[11]),
+                                  font=dict(family='Arial',
+                                            size=10),
+                                  showarrow=False))
+# Title
+annotations.append(dict(xref='paper', yref='paper', x=0.0, y=1.05,
+                              xanchor='left', yanchor='bottom',
+                              text='Fertility Rate in four country between 2005-2016',
+                              font=dict(family='Arial',
+                                        size=15,
+                                        color='rgb(37,37,37)'),
+                              showarrow=False))
+# Source
+annotations.append(dict(xref='paper', yref='paper', x=0.5, y=-0.1,
+                              xanchor='center', yanchor='top',
+                              text='Source: World Bank ',
+                              font=dict(family='Arial',
+                                        size=15,
+                                        color='rgb(150,150,150)'),
+                              showarrow=False))
+
+fig2.update_layout(annotations=annotations)
 # title = 'Fertility Rate'
 # labels = ['ARMENIA', 'BANGLADESH', 'BRAZIL', 'PORTUGAL']
 # colors = ['rgb(0,0,255)', 'rgb(255,165,0)', 'rgb(0,128,0)', 'rgb(106,13,173)']
@@ -223,6 +327,17 @@ dcc.Graph(
                 ]
             }
         ),
+    ),
+    html.Div(
+        dbc.Container(
+            dcc.Graph(figure = fig3)
+
+            ),
+        ),
+    html.Div(
+        dbc.Container(
+            dcc.Graph(figure = fig2)
+        )
     )
 ])
 
