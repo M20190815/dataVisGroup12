@@ -117,6 +117,9 @@ df = pd.read_csv('data/datadata.csv')
 # py.plot(fig, filename='fertility.html')
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+server = app.server
+
 colors = {
     'background': '#333333',
     'text': '#7FDBFF'
@@ -228,7 +231,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
 #
 #         )
 #     return go.Figure(data=data_ag)
-server = app.server
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
