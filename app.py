@@ -11,7 +11,7 @@ import numpy as np
 import plotly.express as px
 import plotly
 
-df = pd.read_csv('datadata.csv')
+df = pd.read_csv('data/datadata.csv')
 
 # title = 'Fertility Rate'
 # labels = ['ARMENIA', 'BANGLADESH', 'BRAZIL', 'PORTUGAL']
@@ -117,12 +117,12 @@ df = pd.read_csv('datadata.csv')
 # fig.show()
 # py.plot(fig, filename='fertility.html')
 
-app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP,'assets/style.css'])
 
 server = app.server
 
 colors = {
-    'background': '#333333',
+    'background': 'rgb(255,255,255)',
     'text': '#7FDBFF'
 }
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
@@ -137,9 +137,12 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
         'textAlign': 'center',
         'color': colors['text']
     }),
+    #dbc.Container(
+        #html.H1('Birth rate',style={'text-align' : 'center'}),
     dcc.Graph(
+        className='graph',
         id='Graph1',
-        # title = 'Birth rate',
+
         figure={
             'data': [
                 {'x': df['year'], 'y': df['Birth_rate'][:12], 'type': 'bar', 'name': df['country'].unique()[0]},
@@ -156,8 +159,8 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
                 }
             }
         }
-    ),
-    html.Div(children = ['Education']),
+    ),#),
+    html.Div(children = ['Education'],style={'text-align':'center'}),
     html.Div(
         dcc.Graph(
             id = 'Graph2',
@@ -173,7 +176,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
         ),
         className = 'container',
     ),
-    html.Div(children=['GDP']),
+    #html.Div(children=['GDP']),
     html.Div(
         dcc.Graph(id = 'graph3',
             figure = px.bar(df, x='year', y='GDP', color='country',title='Evolution of GDP')),# id = 'graph3'),
@@ -197,7 +200,9 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     #     'zoom': 0.9}),
     #
     #     ),
+    html.H1('Map visualization', style={'text-align': 'center'}),
     html.Div(
+
         dbc.Container(
             dcc.Graph(figure = dict(data=[go.Scattermapbox(lat=[-14, 39, 40, 23], #title = 'Map of the countries',
         lon = [-51, -8, 45, 90], mode ='markers+lines', marker = {'size': 10})],layout=go.Layout(autosize=True, hovermode='closest', mapbox = {
@@ -208,7 +213,16 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
         )
     ),
     html.Div(
-
+dcc.Graph(
+            figure = {
+                'data' : [
+                    {'x': df['year'],'y': df['Educ_Tert'][:12], 'type':'bar','name': df['country'].unique()[0]},
+                    {'x': df['year'], 'y': df['Educ_Tert'][12:24], 'type': 'bar', 'name': df['country'].unique()[1]},
+                    {'x': df['year'], 'y': df['Educ_Tert'][24:36], 'type': 'bar', 'name': df['country'].unique()[2]},
+                    {'x': df['year'], 'y': df['Educ_Tert'][36:], 'type': 'bar', 'name': df['country'].unique()[3]},
+                ]
+            }
+        ),
     )
 ])
 
