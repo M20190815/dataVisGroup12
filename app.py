@@ -11,7 +11,7 @@ import numpy as np
 import plotly.express as px
 import plotly
 
-df = pd.read_csv('data/datadata.csv')
+df = pd.read_csv('datadata.csv')
 
 # title = 'Fertility Rate'
 # labels = ['ARMENIA', 'BANGLADESH', 'BRAZIL', 'PORTUGAL']
