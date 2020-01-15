@@ -11,7 +11,7 @@ import numpy as np
 import plotly.express as px
 import plotly
 
-df = pd.read_csv('data/data2.csv')
+df = pd.read_csv('data2.csv')
 fig3 = px.scatter_geo(df, locations="country_code", color="country",
                      hover_name="country", size="Depression",
                      projection="natural earth")
