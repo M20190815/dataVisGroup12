@@ -199,7 +199,7 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     #     ),
     html.Div(
         dbc.Container(
-            dcc.Graph(figure = dict(data=[go.Scattermapbox(lat=[-14, 39, 40, 23], title = 'Map of the countries',
+            dcc.Graph(figure = dict(data=[go.Scattermapbox(lat=[-14, 39, 40, 23], #title = 'Map of the countries',
         lon = [-51, -8, 45, 90], mode ='markers+lines', marker = {'size': 10})],layout=go.Layout(autosize=True, hovermode='closest', mapbox = {
         'center': {'lon': 13, 'lat': 10},
         'style': "stamen-terrain",
