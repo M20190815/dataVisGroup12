@@ -122,10 +122,10 @@ app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 colors = {
-    #'background': '#333333',
+    'background': '#333333',
     'text': '#7FDBFF'
 }
-app.layout = html.Div( children=[
+app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
     html.H1(
         children='Overview',
         style={
@@ -149,8 +149,8 @@ app.layout = html.Div( children=[
 
             ],
             'layout': {
-                #'plot_bgcolor': colors['background'],
-                #'paper_bgcolor': colors['background'],
+                'plot_bgcolor': colors['background'],
+                'paper_bgcolor': colors['background'],
                 'font': {
                     'color': colors['text']
                 }
