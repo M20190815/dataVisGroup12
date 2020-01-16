@@ -10,8 +10,41 @@ import os
 import numpy as np
 import plotly.express as px
 import plotly
+import plotly.io as pio
 
 df = pd.read_csv('data2.csv')
+# x=['2005', '2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016']
+# Armenia=[4.352,4.382,5.064,5.559,4.360,4.217,4.917,5.694,5.496,5.529,4.957,5.340]
+# Bangladesch=[39.478,43.541,44.381,49.511,53.736,59.937,63.413,67.505,69.709,73.189,56.440,72.886]
+# Brazil=[347.308,347.668,363.212,387.631,367.147,419.754,439.412,470.028,503.677,529.808,417.564,514.565]
+# Portugal=[65.279,59.816,60.149,55.624,54.176,48.136,47.623,46.013,45.426,45.052,52.729,50.839]
+#
+# data =dict(x=x,y=[Armenia,Bangladesch,Brazil,Portugal],
+#             mode='lines',
+#             stackgroup='one',
+#             line=dict(
+#                 width=1
+#             ))
+# fig11 = dict(data=data)
+#
+# plotly.offline.plot(fig11)
+
+fig7 = px.scatter(df, x="year", y="Drug_Alc", color="country",size="Drug_Alc",
+                 labels = {'Drug_Alc': 'Alcohol and Drug addiction (%)'},
+                  title = 'Alcohol and Drug addiction (%) in four country between 2005-2016 ',
+                  #template='simple_white'
+                  )
+
+fig6=px.bar(df, x='year', y='Educ_Tert', color='country',title = 'Pop. >25 years wiht Education at least Bsc. in four country between the years 2005-2016 (%)',
+           barmode="group",
+            #template='simple_white',
+            height=400,  facet_col='country',
+            labels = {'Educ_Tert': '% Population > 25 years at least Bsc.'})
+df3=pd.read_excel('data3.xlsx')
+fig5=px.bar(df3, x='Year', y='GDP', color='Country',title = 'GDP per capita (current US$) in four country between 2005-2016',
+                #  template='simple_white',
+            labels = {'GDP': 'GDP per capita (current US$)'})
+
 fig3 = px.scatter_geo(df, locations="country_code", color="country",
                      hover_name="country", size="Depression",
                      projection="natural earth")
@@ -237,46 +270,50 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'color': colors['text']
         }
     ),
-    html.Div(children='Birth rate by Country by year', style={
-        'textAlign': 'center',
-        'color': colors['text']
-    }),
+    # html.Div(children='Birth rate by Country by year', style={
+    #     'textAlign': 'center',
+    #     'color': colors['text']
+    #}),
     #dbc.Container(
         #html.H1('Birth rate',style={'text-align' : 'center'}),
-    dcc.Graph(
-        className='graph',
-        id='Graph1',
-
-        figure={
-            'data': [
-                {'x': df['year'], 'y': df['Birth_rate'][:12], 'type': 'bar', 'name': df['country'].unique()[0]},
-                {'x': df['year'], 'y': df['Birth_rate'][12:24], 'type': 'bar', 'name': df['country'].unique()[1]},
-                {'x': df['year'], 'y': df['Birth_rate'][24:36], 'type': 'bar', 'name': df['country'].unique()[2]},
-                {'x': df['year'], 'y': df['Birth_rate'][36:], 'type': 'bar', 'name': df['country'].unique()[3]},
-
-            ],
-            'layout': {
-                'plot_bgcolor': colors['background'],
-                'paper_bgcolor': colors['background'],
-                'font': {
-                    'color': colors['text']
-                }
-            }
-        }
-    ),#),
+    # dcc.Graph(
+    #     className='graph',
+    #     id='Graph1',
+    #
+    #     figure={
+    #         'data': [
+    #             {'x': df['year'], 'y': df['Birth_rate'][:12], 'type': 'bar', 'name': df['country'].unique()[0]},
+    #             {'x': df['year'], 'y': df['Birth_rate'][12:24], 'type': 'bar', 'name': df['country'].unique()[1]},
+    #             {'x': df['year'], 'y': df['Birth_rate'][24:36], 'type': 'bar', 'name': df['country'].unique()[2]},
+    #             {'x': df['year'], 'y': df['Birth_rate'][36:], 'type': 'bar', 'name': df['country'].unique()[3]},
+    #
+    #         ],
+    #         'layout': {
+    #             'plot_bgcolor': colors['background'],
+    #             'paper_bgcolor': colors['background'],
+    #             'font': {
+    #                 'color': colors['text']
+    #             }
+    #         }
+    #     }
+    # ),#),
+    html.Div(
+        dbc.Container(
+            dcc.Graph(figure=fig5)
+    )),
     html.Div(children = ['Education'],style={'text-align':'center'}),
     html.Div(
         dcc.Graph(
             id = 'Graph2',
 
-            figure = {
-                'data' : [
-                    {'x': df['year'],'y': df['Educ_Tert'][:12], 'type':'line','name': df['country'].unique()[0]},
-                    {'x': df['year'], 'y': df['Educ_Tert'][12:24], 'type': 'line', 'name': df['country'].unique()[1]},
-                    {'x': df['year'], 'y': df['Educ_Tert'][24:36], 'type': 'line', 'name': df['country'].unique()[2]},
-                    {'x': df['year'], 'y': df['Educ_Tert'][36:], 'type': 'line', 'name': df['country'].unique()[3]},
-                ]
-            }
+            figure = fig6
+                # 'data' : [
+                #     {'x': df['year'],'y': df['Educ_Tert'][:12], 'type':'line','name': df['country'].unique()[0]},
+                #     {'x': df['year'], 'y': df['Educ_Tert'][12:24], 'type': 'line', 'name': df['country'].unique()[1]},
+                #     {'x': df['year'], 'y': df['Educ_Tert'][24:36], 'type': 'line', 'name': df['country'].unique()[2]},
+                #     {'x': df['year'], 'y': df['Educ_Tert'][36:], 'type': 'line', 'name': df['country'].unique()[3]},
+                # ]
+
         ),
         className = 'container',
     ),
@@ -338,7 +375,17 @@ dcc.Graph(
         dbc.Container(
             dcc.Graph(figure = fig2)
         )
-    )
+    ),
+    html.Div(
+        dbc.Container(
+            dcc.Graph(figure = fig7)
+        )
+    ),
+    # html.Div(
+    #     dbc.Container(
+    #         dcc.Graph(figure = fig11)
+    #     )
+    # )
 ])
 
 # @app.callback(
