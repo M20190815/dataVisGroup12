@@ -258,7 +258,22 @@ html.Div(className='container', children=[
     html.Div(dbc.Container(dcc.Graph(figure=fig11))),
     html.Div(dbc.Container(dcc.Graph(figure=fig12))),
     #html.Div(children=['GDP']),
+html.Div([
+        html.H6('References:'),
+        html.Div([
+            html.Plaintext('1.Population: World Bank Data'),
+            html.Plaintext('2.GDP: World Bank Data'),
+            html.Plaintext('3.Fertility rate: World Bank Data'),
+            html.Plaintext('4.Alcohol & Drug use disorder: Global Burden of Disease Study 2016 (GBD 2016) Results.' '\n''Institute for Health Metrics and Evaluation (IHME), 2017. Link: http://ghdx.healthdata.org/gbd-results-tool'),
+            html.Plaintext('5.CO2 Emission: World Bank Data'),
+            html.Plaintext('6.Education: World Bank Data'),
+            html.Plaintext('7.Depression: World Bank Data'),
 
+
+
+        ])
+
+    ],style={'text-align' : 'left','whiteSpace': 'pre-wrap'}),
     html.Div(
 
         #dbc.Container(
