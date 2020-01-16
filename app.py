@@ -12,8 +12,8 @@ import plotly.express as px
 import plotly
 import plotly.io as pio
 
-df = pd.read_csv('project/dataVisGroup12-master/data2.csv')
-df3=pd.read_excel('project/dataVisGroup12-master/data3.xlsx')
+df = pd.read_csv('data2.csv')
+df3=pd.read_excel('data3.xlsx')
 
 #World
 fig1 = go.Figure(go.Scattermapbox(mode = "markers+lines",lon = [-51, -8, 45, 90],lat = [-14, 39, 40, 23],marker = {'size': 10}))
