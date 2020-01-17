@@ -10,3 +10,4 @@ numpy
 plotly.express
 xlrd
 seaborn
+csv
