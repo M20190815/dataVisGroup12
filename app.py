@@ -1,50 +1,101 @@
+#Basics
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
+
+#Dash
 import dash
-import gunicorn
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-import pandas as pd
-import plotly.graph_objs as go
 from dash.dependencies import Input, Output
-import os
-import numpy as np
-import plotly.express as px
+#Plotly
 import plotly
+import plotly.graph_objs as go
 import plotly.io as pio
+import plotly.express as px
+import plotly as py
+
+import os
+import csv
+
+import gunicorn
+
+from ipywidgets import interact
 
 df = pd.read_csv('data2.csv')
+print(df.head())
 df3=pd.read_excel('data3.xlsx')
 
 #World
 fig1 = go.Figure(go.Scattermapbox(mode = "markers+lines",lon = [-51, -8, 45, 90],lat = [-14, 39, 40, 23],marker = {'size': 10}))
 fig1.update_layout( margin ={'l':0,'t':0,'b':0,'r':0},mapbox = { 'center': {'lon': 13, 'lat': 10},'style': "stamen-terrain",'center': {'lon': -20, 'lat': -20},'zoom': 0.9})
-#fig1.show()
+fig1.show()
 
 #Population grouth
-fig2=px.line(df, x="year", y="Pop_Growth",color="country",
-             #template='simple_white',
-labels = {'Pop_Growth': 'Population Growth'},
-title = 'Population Growth in four country between 2005-2016')
-#fig2.show()
+#plt.figure(figsize = [10,10])
+fig2=px.line(df, x="year", y="Pop_Growth",color="country",template='simple_white',width=800, height=400,
+labels = {'Pop_Growth': 'Population Growth (%)'}#,animation_group='country',
+         #    ,title = 'Population Growth in four country between 2005-2016')
+             )
+fig2.update_layout(
+  template='none',
+  margin=dict(r=10, t=25, b=40, l=60),title_font_size=24
+)
+fig2.show()
 #GDP per capita
-fig3=px.bar(df3, x='Year', y='GDP', color='Country',title = 'GDP per capita (current US$) in four country between 2005-2016',
-                #  template='simple_white',
+fig3=px.bar(df3, x='Year', y='GDP', color='Country',#title = 'GDP per capita (current US$) in four country between 2005-2016',
+                  template="none",width=800, height=400,
             labels = {'GDP': 'GDP per capita (current US$)'})
 
+
+
+#plt.figure(figsize=(6,4))
+#plt.xlim(-12, 12)
+#bar_plot = sns.barplot(x="portugal3",y="years", color='#9933ff', data = Pyramid_Data2,label="Portugal",orient='h',hue_order=True)
+#bar_plot = sns.barplot(x="armenia3",y="years", color='#3abfbf',data = Pyramid_Data2,label="Armenia",orient='h',hue_order=True  )
+#plt.legend(loc=4, borderaxespad=0.,prop={'size':10})
+#plt.ylabel('Years', fontsize=12)
+#plt.xlabel('Population - Millions', fontsize=12)
+#plt.title('Armenia and Portugal population betweem the years 2005-2016')
+
 #Alcohol
-fig7 = px.scatter(df, x="year", y="Drug_Alc", color="country",size="Drug_Alc",
+fig7 = px.scatter(df, x="year", y="Drug_Alc", color="country",size="Drug_Alc",width=800, height=400,
                  labels = {'Drug_Alc': 'Alcohol and Drug addiction (%)'},
-                  title = 'Alcohol and Drug addiction (%) in four country between 2005-2016 ',
-                  #template='simple_white'
+                  #title = 'Alcohol and Drug addiction (%) in four country between 2005-2016 ',
+                  template='simple_white'
                   )
 
-fig11=px.bar(df, x='year', y='Educ_Tert', color='country',title = 'Pop. >25 years wiht Education at least Bsc. in four country between the years 2005-2016 (%)',
+#fig8 = px.area(df, x="year", y="Drug_Alc", color="country",size="Drug_Alc",width=800, height=400,
+                 #labels = {'Drug_Alc': 'Alcohol and Drug addiction (%)'},
+                  #title = 'Alcohol and Drug addiction (%) in four country between 2005-2016 ',
+                  #template='simple_white'
+                  #)
+sns.set_style("white")
+x=['2005', '2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016']
+Armenia=[4.352,4.382,5.064,5.559,4.360,4.217,4.917,5.694,5.496,5.529,4.957,5.340]
+Bangladesch=[39.478,43.541,44.381,49.511,53.736,59.937,63.413,67.505,69.709,73.189,56.440,72.886]
+Brazil=[347.308,347.668,363.212,387.631,367.147,419.754,439.412,470.028,503.677,529.808,417.564,514.565]
+Portugal=[65.279,59.816,60.149,55.624,54.176,48.136,47.623,46.013,45.426,45.052,52.729,50.839]
+# Basic stacked area chart.
+#fig7, ax = plt.subplots()
+#ax=plt.stackplot(x,Armenia, Portugal, Bangladesch,Brazil, labels=['Armenia','Portugal','Bangladesch','Brazil'])
+#fig = px.area(df, x="year", y="pop", color="continent",
+	      #line_group="country")
+#ax.legend(loc='upper left')
+#plt.show()
+
+
+fig11=px.bar(df, x='year', y='Educ_Tert', color='country',#title = 'Pop. >25 years wiht Education at least Bsc. in four country between the years 2005-2016 (%)',
            barmode="group",
-            #template='simple_white',
-            height=400,  facet_col='country',
+            template='simple_white'
+            ,width=800, height=400,  facet_col='country',
             labels = {'Educ_Tert': '% Population > 25 years at least Bsc.'})
 
-fig12 = px.scatter_geo(df, locations="country_code", color="country",
+fig12 = px.scatter_geo(df, locations="country_code", color="country",width=800, height=400,
                      hover_name="country", size="Depression",
                      projection="natural earth", animation_frame="year")
 #layout3 = [dict]
@@ -63,7 +114,7 @@ y_data = np.array([
 ])
 fig6 = go.Figure()
 for i in range(0, 4):
-    fig6.add_trace(go.Scatter(x=x_data[i], y=y_data[i], mode='lines',name=labels2[i],line=dict(color=colors2[i], width=line_size[i]),connectgaps=True,))
+    fig6.add_trace(go.Scatter(x=x_data[i], y=y_data[i], mode='lines',name=labels2[i],line=dict(color=colors2[i], width=line_size[i]),connectgaps=True))
  # endpoints
     fig6.add_trace(go.Scatter(x=[x_data[i][0], x_data[i][-1]],y=[y_data[i][0], y_data[i][-1]],mode='markers',marker=dict(color=colors2[i], size=mode_size[i])))
 fig6.update_layout(xaxis=dict(showline=True, showgrid=False,showticklabels=True,linecolor='rgb(204, 204, 204)',linewidth=2,
@@ -91,7 +142,7 @@ for y_trace, label, color in zip(y_data, labels2, colors2):
 # Title
 annotations.append(dict(xref='paper', yref='paper', x=0.0, y=1.05,
                               xanchor='left', yanchor='bottom',
-                              text='Fertility Rate in four country between 2005-2016',
+                              #text='Fertility Rate in four country between 2005-2016',
                               font=dict(family='Arial',
                                         size=15,
                                         color='rgb(37,37,37)'),
@@ -216,20 +267,17 @@ app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP,'assets/styl
 server = app.server
 
 colors = {
-    'background': 'rgb(255,255,255)',
-    'text': '#7FDBFF'
-}
+    'background': '#fdf4ca',
+    'background2': '#FF0',
+    'text': 'gray'
+    }
 
-app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[html.H1(
-        children='Data Visualization Report', style={'textAlign': 'center','color': colors['text']}),
-    # html.Div(src={app.get_assets_url('flags.png')}),
-html.H2(
-        children='Visualizing Environmental, Economic and Educational and Depression indicators of Armenia, Bangladesh, Brazil & Portugal',
-        style={
-            'textAlign': 'center',
-            'color': colors['text']
-        }
-    ),
+app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+html.H1(
+children='Visualizing Environmental, Economic, Educational and Depression indicators of Armenia, Bangladesh, Brazil & Portugal',
+ style={'textAlign': 'center', 'color': colors['text']} ),
+
+
 
 html.Div(className='container', children=[
     html.Img(src=app.get_asset_url('flags.png'))], style={'textAlign': 'center'}),
@@ -238,42 +286,36 @@ html.Div(className='container', children=[
         html.Div([
             html.P('Ali Sabbir - M20190580'),
             html.P('Lilit Tonoyan – M20190930'),
-            html.P('Eliane Maria Zanlorense – M20190802'),
+           html.P('Eliane Maria Zanlorense – M20190802'),
             html.P('Fernando Afonso Ribeiro – M20190815'),
 
         ])
 
     ],style={'text-align' : 'center'}),
 
-    #html.H1('Map visualization', style={'text-align': 'center'}),
+    html.H2('Map visualization', style={'text-align': 'center'}),
 
-    html.Div(dbc.Container(dcc.Graph(figure=fig1))),
-    html.Div(dbc.Container(dcc.Graph(figure=fig2))),
-    html.Div(dbc.Container(dcc.Graph(figure=fig3))),
+    html.Div(dbc.Container(dcc.Graph(figure=fig1),style={'height': '70vh', "width" : "100%"}),),
+
+    html.H3('Population Growth (Annual %) between 2005-2016', style={'text-align': 'center'}),
+    html.Div(dbc.Container(dcc.Graph(figure=fig2),style={'height': '70vh', "width" : "100%"}),),
+
+    html.H4('GDP per capita (current US$) between 2005-2016', style={'text-align': 'center'}),
+    html.Div(dbc.Container(dcc.Graph(figure=fig3),style={'height': '70vh', "width" : "100%"}),),
+
     #html.Div(children = ['Education'],style={'text-align':'center'}),
     #html.Div(dcc.Graph(id = 'Graph2',figure = fig6),className = 'container',),
-    html.Div(dbc.Container(dcc.Graph(figure=fig6))),
-    html.Div(dbc.Container(dcc.Graph(figure=fig7))),
-    html.Div(dbc.Container(dcc.Graph(figure=fig10))),
-    html.Div(dbc.Container(dcc.Graph(figure=fig11))),
+    html.H5('Fertility Rate (%) between 2005-2016', style={'text-align': 'center'}),
+    html.Div(dbc.Container(dcc.Graph(figure=fig6),style={'height': '70vh', "width" : "100%"}),),
+    html.H6('Alcohol and Drug addiction (%) between 2005-2016', style={'text-align': 'left'}),
+    html.Div(dbc.Container(dcc.Graph(figure=fig7),style={'height': '70vh', "width" : "100%"}),),
+
+    html.Div(dbc.Container(dcc.Graph(figure=fig10),style={'height': '70vh', "width" : "100%"}),),
+    #html.H0('Pop. >25 years with Education at least Bsc. between 2005-2016 (%)', style={'text-align': 'center'}),
+    html.Div(dbc.Container(dcc.Graph(figure=fig11),style={'height': '70vh', "width" : "100%"}),),
     html.Div(dbc.Container(dcc.Graph(figure=fig12))),
     #html.Div(children=['GDP']),
-html.Div([
-        html.H6('References:'),
-        html.Div([
-            html.Plaintext('1.Population: World Bank Data'),
-            html.Plaintext('2.GDP: World Bank Data'),
-            html.Plaintext('3.Fertility rate: World Bank Data'),
-            html.Plaintext('4.Alcohol & Drug use disorder: Global Burden of Disease Study 2016 (GBD 2016) Results.' '\n''Institute for Health Metrics and Evaluation (IHME), 2017. Link: http://ghdx.healthdata.org/gbd-results-tool'),
-            html.Plaintext('5.CO2 Emission: World Bank Data'),
-            html.Plaintext('6.Education: World Bank Data'),
-            html.Plaintext('7.Depression: World Bank Data'),
 
-
-
-        ])
-
-    ],style={'text-align' : 'left','whiteSpace': 'pre-wrap'}),
     html.Div(
 
         #dbc.Container(
